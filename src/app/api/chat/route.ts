@@ -1,10 +1,12 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { type Message, LangChainAdapter } from 'ai';
-import { createReactAgent } from '@langchain/langgraph/prebuilt';
-import { ChatOpenAI } from '@langchain/openai';
-import { SystemMessage } from '@langchain/core/messages';
 import { convertVercelMessageToLangChainMessage } from '@/utils/message-converters';
 import { logToolCallsInDevelopment } from '@/utils/stream-logging';
+import { Calculator } from '@langchain/community/tools/calculator';
+import { SerpAPI } from '@langchain/community/tools/serpapi';
+import { SystemMessage } from '@langchain/core/messages';
+import { createReactAgent } from '@langchain/langgraph/prebuilt';
+import { ChatOpenAI } from '@langchain/openai';
+import { type Message, LangChainAdapter } from 'ai';
+import { NextRequest, NextResponse } from 'next/server';
 
 const AGENT_SYSTEM_TEMPLATE = `You are a personal assistant named Assistant0. You are a helpful assistant that can answer questions and help with tasks. You have access to a set of tools, use the tools as needed to answer the user's question.`;
 
@@ -35,7 +37,7 @@ export async function POST(req: NextRequest) {
      */
     const agent = createReactAgent({
       llm,
-      tools: [],
+      tools: [new Calculator(), new SerpAPI()],
       /**
        * Modify the stock prompt in the prebuilt agent. See docs
        * for how to customize your agent:
