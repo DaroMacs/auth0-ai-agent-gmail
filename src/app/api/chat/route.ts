@@ -1,7 +1,6 @@
 import { convertVercelMessageToLangChainMessage } from '@/utils/message-converters';
 import { logToolCallsInDevelopment } from '@/utils/stream-logging';
 import { Calculator } from '@langchain/community/tools/calculator';
-import { SerpAPI } from '@langchain/community/tools/serpapi';
 import { SystemMessage } from '@langchain/core/messages';
 import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { ChatOpenAI } from '@langchain/openai';
@@ -37,7 +36,7 @@ export async function POST(req: NextRequest) {
      */
     const agent = createReactAgent({
       llm,
-      tools: [new Calculator(), new SerpAPI()],
+      tools: [new Calculator()],
       /**
        * Modify the stock prompt in the prebuilt agent. See docs
        * for how to customize your agent:
